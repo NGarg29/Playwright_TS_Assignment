@@ -1,0 +1,15 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+extra/app.spec.ts
+extra/pages/essay.page.ts
+extra/pages/extra_curricular_activity.page.ts
+extra/pages/get_to_know.page.ts
+extra/pages/high_school_information.page.ts
+extra/pages/login.page.ts
+extra/pages/review.page.ts
+extra/utils/utils.ts
