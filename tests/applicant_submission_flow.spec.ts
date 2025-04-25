@@ -16,7 +16,7 @@ test.describe('Kaleidoscope Applicant Application process', async () => {
         await page.close();
     });
 
-    test.only('Applicant Submission Test Flow', async () => {
+    test('Applicant Submission Test Flow', async () => {
         await app_page.click_on_login_to_apply();
         await app_page.login();
         await app_page.fill_lets_get_to_know_page();
