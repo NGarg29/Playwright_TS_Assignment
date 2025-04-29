@@ -60,6 +60,11 @@ Steps:
     ```
 ## Basic Configuration Guidelines
 
-  - Maintain all the test data in data.ts file & secret variables including url in .env file
-  - Only if using existing email_id, set the email_id in .env file.
-  - Also, I have pushed positive test-results folder for both usecases(with or without existing email id)
+  - All test data should be maintained in the data.ts file
+  - Sensitive information and configuration variables, such as URLs and credentials, must be stored in the .env file
+  - If using an existing email_id, define it in the .env file only
+
+## Issues or Chalanges got during Testing Process
+
+  - Occasionally, after clicking the "Next" button on the "Get to Know You" form, a "Failed to save" toast message appears. This causes the test process to stall, often taking a long time before eventually timing out or closing
+  - A few XPath or CSS locators have been retained where necessary to ensure accurate validation, but Playwright's built-in locators are used wherever possible.
