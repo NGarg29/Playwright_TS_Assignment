@@ -30,7 +30,7 @@ export class FormPage {
 
     async add_extra_curricular_activities(activity_names: string[]){
         for(let activity_name of activity_names) {
-            const element: Locator = this.page.locator('#form-renderer .mantine-Stack-root .mantine-Stack-root .mantine-Text-root');
+            const element: Locator = this.page.getByRole('button', { name: 'Delete entry' });
             const initial_count: number = await element.count();
             await this.page.getByRole('button', { name: 'Add Entry', exact: true }).click();
             await this.page.getByRole('heading', { level: 2, name: 'Add Entry' }).waitFor({ timeout: 30000 });
@@ -68,7 +68,7 @@ export class FormPage {
         await this.page.getByPlaceholder('e.g. 55413').fill(testData.zipcode);
         await this.page.getByPlaceholder('Enter your current GPA').fill(testData.gpa);
         await this.page.getByPlaceholder('Enter a date').fill(testData.year_of_education);
-
+        // await this.page.getByRole('button', { name: 'Upload File' }).setInputFiles('test_data/My School Transcript.pdf');
         await this.page.locator('input[type=file]').setInputFiles('test_data/My School Transcript.pdf');
         await expect(this.page.getByText('My School Transcript.pdf').first()).toBeVisible();
         await this.go_to_next_page();
@@ -78,22 +78,22 @@ export class FormPage {
     async validate_essay_options(options: string[]){
         for(let option of options) {
             await expect(this.page.getByText('Please select the essay types')).toBeVisible( { timeout: 60000 });
-            await this.page.locator(`input[value="${option}"]`).check();
+            await this.page.getByRole('checkbox', { name: option }).check();
             if(option === "Other") {
                 await expect(this.page.getByText(`Provide an essay about any topic`)).toBeVisible();
             } else {
                 await expect(this.page.getByText(`Essay about ${option}`)).toBeVisible();
             }
-            await this.page.locator(`input[value="${option}"]`).uncheck();
+            await this.page.getByRole('checkbox', { name: option }).uncheck();
             await expect(this.page.getByText(`Essay about ${option}`)).not.toBeVisible();
         }
     }
 
     async add_essay_options(options: string[]){
         for(let option of options) {
-            await this.page.locator(`input[value="${option}"]`).check();
+            await this.page.getByRole('checkbox', { name: option }).check();
             await expect(this.page.getByText(`Essay about ${option}`)).toBeVisible();
-            await this.page.locator(`//label[text()="Essay about ${option}"]//following-sibling::div/textarea`).fill(`This is the description of ${option}`);
+            await this.page.getByRole('textbox', { name: `Essay about ${option}` }).fill('This is the description of ${option}');
             await this.page.getByRole('button', { name: 'Save' }).click();
             await expect(this.page.getByText('Application saved')).toBeVisible();
         }
