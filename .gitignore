@@ -13,3 +13,6 @@ extra/pages/high_school_information.page.ts
 extra/pages/login.page.ts
 extra/pages/review.page.ts
 extra/utils/utils.ts
+extras/app.page.ts
+tests/applicant_submission_flow.spec.ts
+tests/applicant_submission_flow_old.spec.ts
