@@ -12,9 +12,7 @@ export class ReviewPage {
         const pages: string[] = ['Lets get to know you!', 'Extracurricular Activities', 'High School Information', 'Essay'];
         for(let page of pages) {
             await expect(this.page.getByText(page).first()).toBeVisible();
-            // await page.getByRole('button', { name: '1.Lets get to know you! Edit' }).click();
             await this.page.getByRole('button', { name: page }).click();
-            // await this.page.locator(`//button[contains(@class, "mantine-Accordion-control") and contains(., "${page}")]/span[@class="m_3f35ae96 mantine-Accordion-chevron"]`).click();
             switch(page) {
                 case 'Lets get to know you!':
                     expect(await this.getFieldValueLocator('First Name').textContent()).toEqual(testData.first_name);

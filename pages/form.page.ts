@@ -13,19 +13,16 @@ export class FormPage {
         this.high_school_information_heading = this.page.getByText('High School Information');
         this.short_input = this.page.getByPlaceholder('Short Input');
         this.textarea_input = this.page.getByPlaceholder('Long Input');
-        // this.textarea_input = this.page.locator('.mantine-Textarea-input');
     }
 
     async fill_lets_get_to_know_page(){
         await this.page.getByPlaceholder('Enter your street address').fill(testData.street);
         await this.page.getByPlaceholder('Enter your state').fill(testData.state);
         await this.page.getByRole('option', { name: testData.state }).click();
-        // await this.page.locator(`//div[@value="${testData.state}"]`).click();
         await this.page.getByPlaceholder('Enter your city').fill(testData.city);
         await this.page.getByPlaceholder('Enter your zip code').fill(testData.zipcode);
         await this.page.getByPlaceholder('Enter your country').fill(testData.country);
         await this.page.getByRole('option', { name: testData.country }).click();
-        // await this.page.locator(`//div[@value="${testData.country}"]`).click();
         await this.go_to_next_page();
         await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible' });
         await expect(this.page.getByRole('heading', { name: 'Extracurricular Activities' })).toBeVisible();
@@ -37,11 +34,9 @@ export class FormPage {
             const initial_count: number = await element.count();
             await this.page.getByRole('button', { name: 'Add Entry', exact: true }).click();
             await this.page.getByRole('heading', { level: 2, name: 'Add Entry' }).waitFor({ timeout: 30000 });
-            // await this.page.locator('//h2[text()="Add Entry"]').waitFor( { timeout: 30000 });
             await this.short_input.waitFor();
             await this.short_input.fill(activity_name);
             await this.page.getByPlaceholder('123').fill(testData.years);
-            // await this.page.locator('.mantine-NumberInput-input').fill(testData.years);
             await this.textarea_input.first().fill(testData.roles);
             await this.textarea_input.last().fill(testData.description);
             await this.page.getByRole('button', { name: 'Add', exact: true }).click();
@@ -56,7 +51,6 @@ export class FormPage {
 
     async go_to_next_page(){
         await this.page.getByRole('button', { name: 'Next Page' }).click();
-        // await this.page.locator('button[type = "submit"]').click();
     }
 
     async validate_limit_activity_check(){
@@ -71,7 +65,6 @@ export class FormPage {
         await this.page.getByPlaceholder('Enter high school city').fill(testData.city);
         await this.page.getByPlaceholder('Enter high school state').fill(testData.state);
         await this.page.getByRole('option', { name: testData.state }).click();
-        // await this.page.locator(`//div[@value="${testData.state}"]`).click();
         await this.page.getByPlaceholder('e.g. 55413').fill(testData.zipcode);
         await this.page.getByPlaceholder('Enter your current GPA').fill(testData.gpa);
         await this.page.getByPlaceholder('Enter a date').fill(testData.year_of_education);
@@ -107,14 +100,4 @@ export class FormPage {
         await this.go_to_next_page();
         await this.go_to_next_page();
     }
-
-    // async waitForLoading(timeout = 30000) {
-    //     const loadingIndicator = this.page.locator('div.dots');
-    //     try {
-    //         await loadingIndicator.waitFor({ state: 'visible', timeout: 5000 });
-    //         await loadingIndicator.waitFor({ state: 'hidden', timeout });
-    //     } catch (error) {
-    //         console.log('Loading indicator not visible or disappeared quickly');
-    //     }
-    // }
 }
