@@ -24,7 +24,7 @@ export class FormPage {
         await this.page.getByPlaceholder('Enter your country').fill(testData.country);
         await this.page.getByRole('option', { name: testData.country }).click();
         await this.go_to_next_page();
-        await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible' });
+        await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible', timeout: 10000 });
         await expect(this.page.getByRole('heading', { name: 'Extracurricular Activities' })).toBeVisible();
     }
 
@@ -93,7 +93,7 @@ export class FormPage {
         for(let option of options) {
             await this.page.getByRole('checkbox', { name: option }).check();
             await expect(this.page.getByText(`Essay about ${option}`)).toBeVisible();
-            await this.page.getByRole('textbox', { name: `Essay about ${option}` }).fill('This is the description of ${option}');
+            await this.page.getByRole('textbox', { name: `Essay about ${option}` }).fill(`This is the description of ${option}`);
             await this.page.getByRole('button', { name: 'Save' }).click();
             await expect(this.page.getByText('Application saved')).toBeVisible();
         }
