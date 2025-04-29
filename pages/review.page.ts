@@ -66,6 +66,7 @@ export class ReviewPage {
         const url = this.page.url();
         console.log(url);
         await this.page.getByRole('button', { name: 'Submit' }).click();
+        await this.page.getByText('Submitting Application...').waitFor({ state: 'hidden'});
         await this.page.goto(url);
         await expect(this.page.getByText('Edit').first()).not.toBeVisible();
     }

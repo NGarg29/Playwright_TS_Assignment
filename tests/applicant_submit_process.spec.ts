@@ -3,7 +3,7 @@ import { testData } from '../test_data/data';
 const id: string = "test_" + Date.now() + "@gmail.com";
 const email_id: string = testData?.existing_email_id || id;
 
-test.describe.only('Kaleidoscope Applicant Application process', async () => {
+test.describe('Kaleidoscope Applicant Application process', async () => {
     test('Applicant Submission Test Flow', async ({ loginPage, formPage, reviewPage }) => {
         await test.step('Login or Signup into the application', async () => {
             await loginPage.login(email_id);
