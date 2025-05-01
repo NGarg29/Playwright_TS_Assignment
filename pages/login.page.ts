@@ -20,6 +20,7 @@ export class LoginPage {
             await this.next_button.click();
             await this.page.getByLabel('Enter Your Password').fill(testData.password);
             await this.page.getByRole('button', { name: 'Sign In' }).click();
+            await expect(this.page.getByText('Lets get to know you!')).toBeVisible({ timeout: 30000 });
         } else {
             await this.register_new_user(email_id);
         }

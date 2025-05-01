@@ -11,6 +11,7 @@ export class ReviewPage {
     async validate_pages_answers(email_id: string){
         const pages: string[] = ['Lets get to know you!', 'Extracurricular Activities', 'High School Information', 'Essay'];
         for(let page of pages) {
+            await this.page.getByText(page).first().waitFor();
             await expect(this.page.getByText(page).first()).toBeVisible();
             await this.page.getByRole('button', { name: page }).click();
             switch(page) {

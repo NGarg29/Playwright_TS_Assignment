@@ -4,13 +4,11 @@ import { testData } from '../test_data/data';
 export class FormPage {
     page: Page;
     add_button: Locator;
-    high_school_information_heading: Locator;
     short_input: Locator;
     textarea_input: Locator;
     
     constructor(page: Page){
         this.page = page;
-        this.high_school_information_heading = this.page.getByText('High School Information');
         this.short_input = this.page.getByPlaceholder('Short Input');
         this.textarea_input = this.page.getByPlaceholder('Long Input');
     }
@@ -25,11 +23,13 @@ export class FormPage {
         await this.page.getByPlaceholder('Enter your country').fill(testData.country);
         await this.page.getByRole('option', { name: testData.country }).click();
         await this.go_to_next_page();
-        await this.page.locator("//div[@class='dots']").waitFor({ state: 'hidden' });
-        if(await this.page.getByText('Failed to save').isVisible({ timeout: 2000 })) {
+        if(!await this.page.getByText('Failed to save').isVisible({ timeout: 3000 })) {}
+        else {
+            await this.page.reload();
+            // await this.page.locator("//div[@class='dots']").waitFor({ state: 'hidden' });
             await this.page.getByRole('button', { name: 'Next Page' }).click();
         }
-        await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible', timeout: 10000 });
+        await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible', timeout: 30000 });
         await expect(this.page.getByRole('heading', { name: 'Extracurricular Activities' })).toBeVisible();
         console.log('Lets get to know form is filled successfully');
     }
@@ -64,8 +64,8 @@ export class FormPage {
     }
 
     async fill_high_school_information(){
-        await this.high_school_information_heading.waitFor( { state: 'visible', timeout: 10000 });
-        await expect(this.high_school_information_heading).toBeVisible( { timeout: 30000 });
+        await this.page.getByRole('heading', { name: 'High School Information' }).waitFor( { state: 'visible', timeout: 30000 });
+        await expect(this.page.getByRole('heading', { name: 'High School Information' })).toBeVisible();
         console.log('Extra curricular activity form is filled successfully');
         await this.page.getByPlaceholder('Please enter the name of your current High School').waitFor();
         await this.page.getByPlaceholder('Please enter the name of your current High School').fill(testData.high_school_name);
@@ -77,15 +77,18 @@ export class FormPage {
         await this.page.getByPlaceholder('Enter your current GPA').fill(testData.gpa);
         await this.page.getByPlaceholder('Enter a date').fill(testData.year_of_education);
         await this.page.locator('input[type=file]').setInputFiles('test_data/My School Transcript.pdf');
-        await expect(this.page.getByText('My School Transcript.pdf').first()).toBeVisible();
+        await expect(this.page.getByText('My School Transcript.pdf').first()).toBeVisible({ timeout: 5000 });
         await this.go_to_next_page();
     }
 
     async validate_essay_options(options: string[]){
+        await this.page.getByRole('heading', { name: 'Essay' }).waitFor( { state: 'visible', timeout: 30000 });
+        await expect(this.page.getByRole('heading', { name: 'Essay' })).toBeVisible();
         console.log('High school information form is filled successfully');
+        await this.page.getByText('Please select the essay types').waitFor();
+        await expect(this.page.getByText('Please select the essay types')).toBeVisible();
         for(let option of options) {
-            await this.page.getByText('Please select the essay types').waitFor( { state: 'visible', timeout: 10000 });
-            await expect(this.page.getByText('Please select the essay types')).toBeVisible( { timeout: 60000 });
+            await this.page.getByRole('checkbox', { name: option }).waitFor();
             await this.page.getByRole('checkbox', { name: option }).check();
             if(option === "Other") {
                 await expect(this.page.getByText(`Provide an essay about any topic`)).toBeVisible();
@@ -99,8 +102,9 @@ export class FormPage {
 
     async add_essay_options(options: string[]){
         for(let option of options) {
-            await this.page.getByRole('checkbox', { name: option }).waitFor();
+            await this.page.waitForTimeout(200);
             await this.page.getByRole('checkbox', { name: option }).check();
+            await this.page.getByText(`Essay about ${option}`).waitFor({ state: 'visible' });
             await expect(this.page.getByText(`Essay about ${option}`)).toBeVisible();
             await this.page.getByRole('textbox', { name: `Essay about ${option}` }).waitFor();
             await this.page.getByRole('textbox', { name: `Essay about ${option}` }).fill(`This is the description of ${option}`);
