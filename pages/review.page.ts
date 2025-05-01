@@ -45,6 +45,7 @@ export class ReviewPage {
                     break;
             }
         }
+        console.log('Review page is validated successfully');
     }
 
     async validate_extracurricular_activies(options: string[]){
@@ -65,6 +66,7 @@ export class ReviewPage {
         console.log(url);
         await this.page.getByRole('button', { name: 'Submit' }).click();
         await this.page.getByText('Submitting Application...').waitFor({ state: 'hidden'});
+        console.log('Application form got submitted');
         await this.page.goto(url);
         await expect(this.page.getByText('Edit').first()).not.toBeVisible();
     }

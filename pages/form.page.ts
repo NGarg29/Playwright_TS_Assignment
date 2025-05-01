@@ -31,6 +31,7 @@ export class FormPage {
         }
         await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible', timeout: 10000 });
         await expect(this.page.getByRole('heading', { name: 'Extracurricular Activities' })).toBeVisible();
+        console.log('Lets get to know form is filled successfully');
     }
 
     async add_extra_curricular_activities(activity_names: string[]){
@@ -65,6 +66,7 @@ export class FormPage {
     async fill_high_school_information(){
         await this.high_school_information_heading.waitFor( { state: 'visible', timeout: 10000 });
         await expect(this.high_school_information_heading).toBeVisible( { timeout: 30000 });
+        console.log('Extra curricular activity form is filled successfully');
         await this.page.getByPlaceholder('Please enter the name of your current High School').waitFor();
         await this.page.getByPlaceholder('Please enter the name of your current High School').fill(testData.high_school_name);
         await this.page.getByPlaceholder('Enter high school street address').fill(testData.street);
@@ -80,6 +82,7 @@ export class FormPage {
     }
 
     async validate_essay_options(options: string[]){
+        console.log('High school information form is filled successfully');
         for(let option of options) {
             await this.page.getByText('Please select the essay types').waitFor( { state: 'visible', timeout: 10000 });
             await expect(this.page.getByText('Please select the essay types')).toBeVisible( { timeout: 60000 });
@@ -105,5 +108,6 @@ export class FormPage {
             await expect(this.page.getByText('Application saved')).toBeVisible();
         }
         await this.go_to_next_page();
+        console.log('Essay type information form is filled successfully');
     }
 }

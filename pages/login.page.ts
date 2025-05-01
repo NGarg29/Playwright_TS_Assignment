@@ -23,7 +23,7 @@ export class LoginPage {
         } else {
             await this.register_new_user(email_id);
         }
-        console.log(email_id);
+        console.log('User is logged in or Registered with email id:', email_id);
     }
 
     async register_new_user(email_id: string){
