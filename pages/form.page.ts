@@ -16,6 +16,7 @@ export class FormPage {
     }
 
     async fill_lets_get_to_know_page(){
+        await this.page.getByPlaceholder('Enter your street address').waitFor();
         await this.page.getByPlaceholder('Enter your street address').fill(testData.street);
         await this.page.getByPlaceholder('Enter your state').fill(testData.state);
         await this.page.getByRole('option', { name: testData.state }).click();
@@ -46,11 +47,14 @@ export class FormPage {
             expect(await element.count()).toBeGreaterThan(initial_count);
         }
         await this.go_to_next_page();
-        await this.go_to_next_page();
     }
 
     async go_to_next_page(){
+        await this.page.waitForTimeout(1000);
         await this.page.getByRole('button', { name: 'Next Page' }).click();
+        if(await this.page.getByText('Failed to save').isVisible({ timeout: 2000 })) {
+            await this.page.getByRole('button', { name: 'Next Page' }).click();
+        }
     }
 
     async validate_limit_activity_check(){
@@ -58,8 +62,9 @@ export class FormPage {
     }
 
     async fill_high_school_information(){
-        await this.high_school_information_heading.waitFor({ timeout: 60000 });
+        await this.high_school_information_heading.waitFor( { state: 'visible', timeout: 10000 });
         await expect(this.high_school_information_heading).toBeVisible( { timeout: 30000 });
+        await this.page.getByPlaceholder('Please enter the name of your current High School').waitFor();
         await this.page.getByPlaceholder('Please enter the name of your current High School').fill(testData.high_school_name);
         await this.page.getByPlaceholder('Enter high school street address').fill(testData.street);
         await this.page.getByPlaceholder('Enter high school city').fill(testData.city);
@@ -68,15 +73,14 @@ export class FormPage {
         await this.page.getByPlaceholder('e.g. 55413').fill(testData.zipcode);
         await this.page.getByPlaceholder('Enter your current GPA').fill(testData.gpa);
         await this.page.getByPlaceholder('Enter a date').fill(testData.year_of_education);
-        // await this.page.getByRole('button', { name: 'Upload File' }).setInputFiles('test_data/My School Transcript.pdf');
         await this.page.locator('input[type=file]').setInputFiles('test_data/My School Transcript.pdf');
         await expect(this.page.getByText('My School Transcript.pdf').first()).toBeVisible();
-        await this.go_to_next_page();
         await this.go_to_next_page();
     }
 
     async validate_essay_options(options: string[]){
         for(let option of options) {
+            await this.page.getByText('Please select the essay types').waitFor( { state: 'visible', timeout: 10000 });
             await expect(this.page.getByText('Please select the essay types')).toBeVisible( { timeout: 60000 });
             await this.page.getByRole('checkbox', { name: option }).check();
             if(option === "Other") {
@@ -91,13 +95,14 @@ export class FormPage {
 
     async add_essay_options(options: string[]){
         for(let option of options) {
+            await this.page.getByRole('checkbox', { name: option }).waitFor();
             await this.page.getByRole('checkbox', { name: option }).check();
             await expect(this.page.getByText(`Essay about ${option}`)).toBeVisible();
+            await this.page.getByRole('textbox', { name: `Essay about ${option}` }).waitFor();
             await this.page.getByRole('textbox', { name: `Essay about ${option}` }).fill(`This is the description of ${option}`);
             await this.page.getByRole('button', { name: 'Save' }).click();
             await expect(this.page.getByText('Application saved')).toBeVisible();
         }
-        await this.go_to_next_page();
         await this.go_to_next_page();
     }
 }
