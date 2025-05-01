@@ -25,6 +25,10 @@ export class FormPage {
         await this.page.getByPlaceholder('Enter your country').fill(testData.country);
         await this.page.getByRole('option', { name: testData.country }).click();
         await this.go_to_next_page();
+        await this.page.locator("//div[@class='dots']").waitFor({ state: 'hidden' });
+        if(await this.page.getByText('Failed to save').isVisible({ timeout: 2000 })) {
+            await this.page.getByRole('button', { name: 'Next Page' }).click();
+        }
         await this.page.getByRole('heading', { name: 'Extracurricular Activities' }).waitFor( { state: 'visible', timeout: 10000 });
         await expect(this.page.getByRole('heading', { name: 'Extracurricular Activities' })).toBeVisible();
     }
@@ -52,9 +56,6 @@ export class FormPage {
     async go_to_next_page(){
         await this.page.waitForTimeout(1000);
         await this.page.getByRole('button', { name: 'Next Page' }).click();
-        if(await this.page.getByText('Failed to save').isVisible({ timeout: 2000 })) {
-            await this.page.getByRole('button', { name: 'Next Page' }).click();
-        }
     }
 
     async validate_limit_activity_check(){
